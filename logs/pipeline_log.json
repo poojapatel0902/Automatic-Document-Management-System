@@ -1,0 +1,316 @@
+{
+  "timestamp": "2026-03-30T06:27:16.785747",
+  "total": 7,
+  "success": 7,
+  "failed": 0,
+  "results": [
+    {
+      "file": "/home/claude/AI_DMS/sample_documents/neha_singh_report.pdf",
+      "status": "success",
+      "message": "Saved to: /home/claude/AI_DMS/output/Neha/Singh/Manoj_Singh_BE-303/neha_singh_report.pdf",
+      "report": {
+        "metadata": {
+          "processed_at": "2026-03-30T06:27:15.622255",
+          "original_file": "neha_singh_report.pdf",
+          "file_type": ".pdf",
+          "file_size_kb": 2.12
+        },
+        "language": {
+          "detected": "English",
+          "code": "en",
+          "was_translated": false
+        },
+        "extracted_entities": {
+          "first_name": "Neha",
+          "surname": "Singh",
+          "father_name": "Manoj Singh",
+          "unique_id": "BE-303",
+          "id_type": "Employee ID",
+          "email": "neha.singh@company.com",
+          "department": "Backend / IoT"
+        },
+        "document_summary": {
+          "summary_text": "Employee Performance Report Pavitrasoft Pvt. | Q1 2025 First Name: Neha Surname: Singh Father's Name: Manoj Singh Employee ID: BE-303 Department: Backend / IoT Role: IoT Architect Email: neha.singh@company.com Q1 Tasks: 60 Completed Rating: Outstanding Summary: Neha Singh is a highly skilled IoT Architect in the Backend team at Pavitrasoft. She successfully led the SensorLive Integration project, completing 60 tasks in Q1 2025 with zero critical bugs.",
+          "method_used": "TF-IDF Extractive",
+          "word_count": 77,
+          "key_topics": [
+            "Singh",
+            "Neha",
+            "Employee",
+            "Pavitrasoft",
+            "Name"
+          ]
+        },
+        "routing": {
+          "final_saved_path": "/home/claude/AI_DMS/output/Neha/Singh/Manoj_Singh_BE-303/neha_singh_report.pdf",
+          "folder_structure": "/home/claude/AI_DMS/output/Neha/Singh/Manoj_Singh_BE-303",
+          "action": "copied"
+        }
+      }
+    },
+    {
+      "file": "/home/claude/AI_DMS/sample_documents/hindi_rahul_sharma.docx",
+      "status": "success",
+      "message": "Saved to: /home/claude/AI_DMS/output/Unknown/Unknown/NoFather_EMP-301/hindi_rahul_sharma.docx",
+      "report": {
+        "metadata": {
+          "processed_at": "2026-03-30T06:27:15.783049",
+          "original_file": "hindi_rahul_sharma.docx",
+          "file_type": ".docx",
+          "file_size_kb": 36.29
+        },
+        "language": {
+          "detected": "English",
+          "code": "en",
+          "was_translated": false
+        },
+        "extracted_entities": {
+          "first_name": null,
+          "surname": null,
+          "father_name": null,
+          "unique_id": "EMP-301",
+          "id_type": "Employee ID",
+          "email": "rahul.sharma@company.com",
+          "department": null
+        },
+        "document_summary": {
+          "summary_text": "कर्मचारी सूचना प्रपत्र यह कर्मचारी UI/UX डिज़ाइन में विशेषज्ञ है। इन्होंने SensorLive Dashboard का पूरा डिज़ाइन तैयार किया है। This employee specializes in UI/UX design and has completed the full dashboard layout for the SensorLive project in Q1 2025. पहला नाम (First Name): | Rahul उपनाम (Surname): | Sharma पिता का नाम (Father): | Rajesh Sharma कर्मचारी आईडी (ID): | EMP-301 विभाग (Department): | UI/UX Design ईमेल (Email): | rahul.sharma@company.com",
+          "method_used": "Frequency-Based (Fallback)",
+          "word_count": 70,
+          "key_topics": [
+            "Sharma",
+            "Sensorlive",
+            "Dashboard",
+            "Design",
+            "Rahul"
+          ]
+        },
+        "routing": {
+          "final_saved_path": "/home/claude/AI_DMS/output/Unknown/Unknown/NoFather_EMP-301/hindi_rahul_sharma.docx",
+          "folder_structure": "/home/claude/AI_DMS/output/Unknown/Unknown/NoFather_EMP-301",
+          "action": "copied"
+        }
+      }
+    },
+    {
+      "file": "/home/claude/AI_DMS/sample_documents/spanish_raj_mehta.txt",
+      "status": "success",
+      "message": "Saved to: /home/claude/AI_DMS/output/Raj/Mehta/Sunil_Mehta_FIN-101/spanish_raj_mehta.txt",
+      "report": {
+        "metadata": {
+          "processed_at": "2026-03-30T06:27:16.093757",
+          "original_file": "spanish_raj_mehta.txt",
+          "file_type": ".txt",
+          "file_size_kb": 0.65
+        },
+        "language": {
+          "detected": "Spanish",
+          "code": "es",
+          "was_translated": true
+        },
+        "extracted_entities": {
+          "first_name": "Raj",
+          "surname": "Mehta",
+          "father_name": "Sunil Mehta",
+          "unique_id": "FIN-101",
+          "id_type": "Employee ID",
+          "email": "raj.mehta@company.com",
+          "department": "Finanzas (Finance)"
+        },
+        "document_summary": {
+          "summary_text": "Formulario de Información del Empleado ======================================= First Name: Raj Surname: Mehta Father's Name: Sunil Mehta Employee ID: FIN-101 Department: Finanzas (Finance) Role: Analista Financiero Senior Email: raj.mehta@company.com  Resumen del Informe: Raj Mehta es un analista financiero altamente competente con experiencia en contabilidad corporativa y análisis de inversiones. Durante el primer trimestre de 2025, completó con éxito la auditoría anual y presentó el informe de presupuesto al directorio. The AI system will auto-detect and translate it.",
+          "method_used": "TF-IDF Extractive",
+          "word_count": 87,
+          "key_topics": [
+            "Mehta",
+            "Name",
+            "Analista",
+            "Financiero",
+            "Informe"
+          ]
+        },
+        "routing": {
+          "final_saved_path": "/home/claude/AI_DMS/output/Raj/Mehta/Sunil_Mehta_FIN-101/spanish_raj_mehta.txt",
+          "folder_structure": "/home/claude/AI_DMS/output/Raj/Mehta/Sunil_Mehta_FIN-101",
+          "action": "copied"
+        }
+      }
+    },
+    {
+      "file": "/home/claude/AI_DMS/sample_documents/french_priya_shah.txt",
+      "status": "success",
+      "message": "Saved to: /home/claude/AI_DMS/output/Priya/Shah/Dinesh_Shah_HR-901/french_priya_shah.txt",
+      "report": {
+        "metadata": {
+          "processed_at": "2026-03-30T06:27:16.106370",
+          "original_file": "french_priya_shah.txt",
+          "file_type": ".txt",
+          "file_size_kb": 0.69
+        },
+        "language": {
+          "detected": "French",
+          "code": "fr",
+          "was_translated": true
+        },
+        "extracted_entities": {
+          "first_name": "Priya",
+          "surname": "Shah",
+          "father_name": "Dinesh Shah",
+          "unique_id": "HR-901",
+          "id_type": "Employee ID",
+          "email": "priya.shah@company.com",
+          "department": "Ressources Humaines (HR)"
+        },
+        "document_summary": {
+          "summary_text": "Formulaire d'Information sur l'Employé ====================================== First Name: Priya Surname: Shah Father's Name: Dinesh Shah Employee ID: HR-901 Department: Ressources Humaines (HR) Role: Responsable RH Senior Email: priya.shah@company.com  Résumé du Rapport: Priya Shah est une professionnelle RH expérimentée avec plus de 5 ans d'expérience. Elle gère le recrutement et le développement des talents pour toute l'organisation. Sa performance est évaluée comme Excellente par la direction.",
+          "method_used": "TF-IDF Extractive",
+          "word_count": 96,
+          "key_topics": [
+            "Shah",
+            "Priya",
+            "Name",
+            "Avec",
+            "Elle"
+          ]
+        },
+        "routing": {
+          "final_saved_path": "/home/claude/AI_DMS/output/Priya/Shah/Dinesh_Shah_HR-901/french_priya_shah.txt",
+          "folder_structure": "/home/claude/AI_DMS/output/Priya/Shah/Dinesh_Shah_HR-901",
+          "action": "copied"
+        }
+      }
+    },
+    {
+      "file": "/home/claude/AI_DMS/sample_documents/english_pooja_patel.docx",
+      "status": "success",
+      "message": "Saved to: /home/claude/AI_DMS/output/Unknown/Unknown/NoFather_DEV-402/english_pooja_patel.docx",
+      "report": {
+        "metadata": {
+          "processed_at": "2026-03-30T06:27:16.162580",
+          "original_file": "english_pooja_patel.docx",
+          "file_type": ".docx",
+          "file_size_kb": 36.2
+        },
+        "language": {
+          "detected": "English",
+          "code": "en",
+          "was_translated": false
+        },
+        "extracted_entities": {
+          "first_name": null,
+          "surname": null,
+          "father_name": null,
+          "unique_id": "DEV-402",
+          "id_type": "Employee ID",
+          "email": "pooja.patel@company.com",
+          "department": "| Software Development"
+        },
+        "document_summary": {
+          "summary_text": "Employee Information Form This employee has demonstrated exceptional skill in frontend technologies including React and TypeScript. She leads the UI team for the SensorLive Dashboard project. First Name: | Pooja Surname: | Patel Father's Name: | Bhadhreshkumar Patel Employee ID: | DEV-402 Department: | Software Development Role: | Frontend Engineer Date of Joining: | 15-Aug-2021 Email: | pooja.patel@company.com",
+          "method_used": "TF-IDF Extractive",
+          "word_count": 69,
+          "key_topics": [
+            "Employee",
+            "Patel",
+            "Frontend",
+            "Name",
+            "Pooja"
+          ]
+        },
+        "routing": {
+          "final_saved_path": "/home/claude/AI_DMS/output/Unknown/Unknown/NoFather_DEV-402/english_pooja_patel.docx",
+          "folder_structure": "/home/claude/AI_DMS/output/Unknown/Unknown/NoFather_DEV-402",
+          "action": "copied"
+        }
+      }
+    },
+    {
+      "file": "/home/claude/AI_DMS/sample_documents/gujarati_hardik_pandya.docx",
+      "status": "success",
+      "message": "Saved to: /home/claude/AI_DMS/output/Unknown/Unknown/NoFather_DEV-501/gujarati_hardik_pandya.docx",
+      "report": {
+        "metadata": {
+          "processed_at": "2026-03-30T06:27:16.186548",
+          "original_file": "gujarati_hardik_pandya.docx",
+          "file_type": ".docx",
+          "file_size_kb": 36.25
+        },
+        "language": {
+          "detected": "English",
+          "code": "en",
+          "was_translated": false
+        },
+        "extracted_entities": {
+          "first_name": null,
+          "surname": null,
+          "father_name": null,
+          "unique_id": "DEV-501",
+          "id_type": "Employee ID",
+          "email": "hardik.pandya@company.com",
+          "department": null
+        },
+        "document_summary": {
+          "summary_text": "This employee is an expert in DevOps and manages CI/CD pipelines for all projects at Pavitrasoft. He has automated 15+ deployment workflows in 2025. પ્રથમ નામ (First Name): | Hardik અટક (Surname): | Pandya પિતાનું નામ (Father): | Rameshbhai Pandya કર્મચારી ID (ID): | DEV-501 વિભાગ (Department): | DevOps ઇમેઇલ (Email): | hardik.pandya@company.com",
+          "method_used": "TF-IDF Extractive",
+          "word_count": 62,
+          "key_topics": [
+            "Devops",
+            "Pandya",
+            "Hardik",
+            "Employee",
+            "Expert"
+          ]
+        },
+        "routing": {
+          "final_saved_path": "/home/claude/AI_DMS/output/Unknown/Unknown/NoFather_DEV-501/gujarati_hardik_pandya.docx",
+          "folder_structure": "/home/claude/AI_DMS/output/Unknown/Unknown/NoFather_DEV-501",
+          "action": "copied"
+        }
+      }
+    },
+    {
+      "file": "/home/claude/AI_DMS/sample_documents/employee_performance_report.xlsx",
+      "status": "success",
+      "message": "Saved to: /home/claude/AI_DMS/output/Surname/Father/Employee_Id_Department/employee_performance_report.xlsx",
+      "report": {
+        "metadata": {
+          "processed_at": "2026-03-30T06:27:16.783908",
+          "original_file": "employee_performance_report.xlsx",
+          "file_type": ".xlsx",
+          "file_size_kb": 5.24
+        },
+        "language": {
+          "detected": "English",
+          "code": "en",
+          "was_translated": false
+        },
+        "extracted_entities": {
+          "first_name": "Surname",
+          "surname": "Father",
+          "father_name": "Employee Id",
+          "unique_id": "Department",
+          "id_type": "Employee ID",
+          "email": null,
+          "department": "Role"
+        },
+        "document_summary": {
+          "summary_text": "[Sheet: Employee Report] First Name | Surname | Father's Name | Employee ID | Department | Role | Q1 Tasks | Q1 Bugs Fixed | Rating -------------------------------------------------- First Name: Amit Surname: Verma Father's Name: Anil Verma Employee ID: DS-401 Department: Data Science Role: ML Engineer Q1 Tasks: 38 Q1 Bugs Fixed: 5 Rating: Good --- First Name: Amit Surname: Verma Father's Name: Suresh Verma Employee ID: FS-405 Department: Full Stack Role: Dev Lead Q1 Tasks: 52 Q1 Bugs Fixed: 18 Rating: Excellent --- First Name: Neha Surname: Singh Father's Name: Manoj Singh Employee ID: BE-303 Department: Backend/IoT Role: IoT Architect Q1 Tasks: 60 Q1 Bugs Fixed: 8 Rating: Outstanding --- First Name: Kiran Surname: Desai Father's Name: Prakash Desai Employee ID: QA-201 Department: QA Testing Role: QA Lead Q1 Tasks: 75 Q1 Bugs Fixed: 0 Rating: Outstanding --- First Name: Prince Surname: Patel Father's Name: Rakeshbhai Employee ID: MD-601 Department: Mobile Dev Role: Flutter Dev Q1 Tasks: 45 Q1 Bugs Fixed: 10 Rating: Good ---",
+          "method_used": "Frequency-Based (Fallback)",
+          "word_count": 165,
+          "key_topics": [
+            "Name",
+            "Employee",
+            "First",
+            "Surname",
+            "Father"
+          ]
+        },
+        "routing": {
+          "final_saved_path": "/home/claude/AI_DMS/output/Surname/Father/Employee_Id_Department/employee_performance_report.xlsx",
+          "folder_structure": "/home/claude/AI_DMS/output/Surname/Father/Employee_Id_Department",
+          "action": "copied"
+        }
+      }
+    }
+  ]
+}

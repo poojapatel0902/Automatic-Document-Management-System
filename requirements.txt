@@ -1,0 +1,30 @@
+# ============================================
+# AI-Powered Document Management System
+# Requirements — install with:
+# pip install -r requirements.txt
+# ============================================
+
+# Document Reading
+python-docx==1.1.2
+pdfplumber==0.11.4
+openpyxl==3.1.5
+pandas==2.2.3
+
+# OCR (Image Reading)
+pytesseract==0.3.13
+Pillow==11.1.0
+easyocr==1.7.2
+
+# NLP — Entity Extraction
+spacy==3.8.3
+
+# Language Translation
+deep-translator==1.11.4
+
+# AI Summarization (lightweight)
+sumy==0.11.0
+nltk==3.9.1
+
+# Utilities
+colorama==0.4.6
+tqdm==4.67.1

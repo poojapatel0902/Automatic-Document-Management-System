@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-03-31 10:43:46",
+  "file": "english_pooja_patel.docx",
+  "file_type": "document",
+  "original_lang": "en",
+  "was_translated": false,
+  "entities": {
+    "first_name": null,
+    "surname": null,
+    "father_name": "| Bhadhreshkumar Patel",
+    "unique_id": {
+      "type": "ID",
+      "value": "logies"
+    },
+    "dob": null,
+    "email": "pooja.patel@company.com",
+    "phone": null,
+    "department": "| Software Development"
+  },
+  "summary": "Employee Information Form This employee has demonstrated exceptional skill in frontend technologies including React and TypeScript. Her performance in Q1 2025 was rated Outstanding by her manager. First Name: | Pooja Surname: | Patel Father's Name: | Bhadhreshkumar Patel Employee ID: | DEV-402 Department: | Software Development Role: | Frontend Engineer Date of Joining: | 15-Aug-2021 Email: | pooja.patel@company.com",
+  "saved_to": "D:\\Pooja\\project\\AI_DMS\\output\\Unknown\\Unknown\\Bhadhreshkumar_Patel_logies\\english_pooja_patel.docx",
+  "folder": "output/Unknown/Unknown/Bhadhreshkumar_Patel_logies"
+}

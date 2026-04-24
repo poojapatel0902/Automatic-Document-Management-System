@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-03-31 10:43:52",
+  "file": "hindi_rahul_sharma.docx",
+  "file_type": "document",
+  "original_lang": "hi",
+  "was_translated": true,
+  "entities": {
+    "first_name": null,
+    "surname": null,
+    "father_name": "Rajesh Sharma",
+    "unique_id": {
+      "type": "Unknown",
+      "value": null
+    },
+    "dob": null,
+    "email": "rahul.sharma@company.com",
+    "phone": null,
+    "department": "| UI/UX Design"
+  },
+  "summary": "employee information form This employee is an expert in UI/UX design. This employee specializes in UI/UX design and has completed the full dashboard layout for the SensorLive project in Q1 2025. First Name: | Rahul Surname: | Sharma Father's Name: Rajesh Sharma Employee ID: | EMP-301 Department: | UI/UX Design Email: | rahul.sharma@company.com",
+  "saved_to": "D:\\Pooja\\project\\AI_DMS\\output\\Unknown\\Unknown\\Rajesh_Sharma_NoID\\hindi_rahul_sharma.docx",
+  "folder": "output/Unknown/Unknown/Rajesh_Sharma_NoID"
+}

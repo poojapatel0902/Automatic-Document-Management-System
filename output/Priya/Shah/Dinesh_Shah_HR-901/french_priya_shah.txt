@@ -1,0 +1,17 @@
+Formulaire d'Information sur l'Employé
+======================================
+First Name: Priya
+Surname: Shah
+Father's Name: Dinesh Shah
+Employee ID: HR-901
+Department: Ressources Humaines (HR)
+Role: Responsable RH Senior
+Email: priya.shah@company.com
+
+Résumé du Rapport:
+Priya Shah est une professionnelle RH expérimentée avec plus de 5 ans d'expérience.
+Elle gère le recrutement et le développement des talents pour toute l'organisation.
+En Q1 2025, elle a recruté avec succès 12 nouveaux ingénieurs et lancé le programme
+de formation interne. Sa performance est évaluée comme Excellente par la direction.
+
+Note: This document is in French. The AI system will auto-detect and translate it.

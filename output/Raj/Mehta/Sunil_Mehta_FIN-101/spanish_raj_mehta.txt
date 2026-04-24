@@ -1,0 +1,17 @@
+Formulario de Información del Empleado
+=======================================
+First Name: Raj
+Surname: Mehta
+Father's Name: Sunil Mehta
+Employee ID: FIN-101
+Department: Finanzas (Finance)
+Role: Analista Financiero Senior
+Email: raj.mehta@company.com
+
+Resumen del Informe:
+Raj Mehta es un analista financiero altamente competente con experiencia en
+contabilidad corporativa y análisis de inversiones. Durante el primer trimestre
+de 2025, completó con éxito la auditoría anual y presentó el informe de presupuesto
+al directorio. Su calificación de desempeño es Sobresaliente.
+
+Note: This document is in Spanish. The AI system will auto-detect and translate it.

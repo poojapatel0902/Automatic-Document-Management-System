@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-03-31 10:43:46",
+  "file": "employee_performance_report.xlsx",
+  "file_type": "spreadsheet",
+  "original_lang": "en",
+  "was_translated": false,
+  "entities": {
+    "first_name": "Amit",
+    "surname": "Verma",
+    "father_name": "Anil Verma",
+    "unique_id": {
+      "type": "Emp ID",
+      "value": "DS-401"
+    },
+    "dob": null,
+    "email": null,
+    "phone": null,
+    "department": "Data Science"
+  },
+  "summary": "First Name: Amit Surname: Verma Father's Name: Anil Verma Employee ID: DS-401 Department: Data Science Role: ML Engineer Q1 Tasks: 38 Q1 Bugs Fixed: 5 Rating: Good First Name: Amit Surname: Verma Father's Name: Suresh Verma Employee ID: FS-405 Department: Full Stack Role: Dev Lead Q1 Tasks: 52 Q1 Bugs Fixed: 18 Rating: Excellent First Name: Neha Surname: Singh Father's Name: Manoj Singh Employee ID: BE-303 Department: Backend/IoT Role: IoT Architect Q1 Tasks: 60 Q1 Bugs Fixed: 8 Rating: Outstanding First Name: Kiran Surname: Desai Father's Name: Prakash Desai Employee ID: QA-201 Department: QA Testing Role: QA Lead Q1 Tasks: 75 Q1 Bugs Fixed: 0 Rating: Outstanding First Name: Prince Surname: Patel Father's Name: Rakeshbhai Employee ID: MD-601 Department: Mobile Dev Role: Flutter Dev Q1 Tasks: 45 Q1 Bugs Fixed: 10 Rating: Good",
+  "saved_to": "D:\\Pooja\\project\\AI_DMS\\output\\Amit\\Verma\\Anil_Verma_DS-401\\employee_performance_report.xlsx",
+  "folder": "output/Amit/Verma/Anil_Verma_DS-401"
+}

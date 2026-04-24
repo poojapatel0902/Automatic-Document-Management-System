@@ -1,0 +1,168 @@
+{
+  "total": 7,
+  "success": 7,
+  "failed": 0,
+  "reports": [
+    {
+      "timestamp": "2026-03-31 10:43:46",
+      "file": "employee_performance_report.xlsx",
+      "file_type": "spreadsheet",
+      "original_lang": "en",
+      "was_translated": false,
+      "entities": {
+        "first_name": "Amit",
+        "surname": "Verma",
+        "father_name": "Anil Verma",
+        "unique_id": {
+          "type": "Emp ID",
+          "value": "DS-401"
+        },
+        "dob": null,
+        "email": null,
+        "phone": null,
+        "department": "Data Science"
+      },
+      "summary": "First Name: Amit Surname: Verma Father's Name: Anil Verma Employee ID: DS-401 Department: Data Science Role: ML Engineer Q1 Tasks: 38 Q1 Bugs Fixed: 5 Rating: Good First Name: Amit Surname: Verma Father's Name: Suresh Verma Employee ID: FS-405 Department: Full Stack Role: Dev Lead Q1 Tasks: 52 Q1 Bugs Fixed: 18 Rating: Excellent First Name: Neha Surname: Singh Father's Name: Manoj Singh Employee ID: BE-303 Department: Backend/IoT Role: IoT Architect Q1 Tasks: 60 Q1 Bugs Fixed: 8 Rating: Outstanding First Name: Kiran Surname: Desai Father's Name: Prakash Desai Employee ID: QA-201 Department: QA Testing Role: QA Lead Q1 Tasks: 75 Q1 Bugs Fixed: 0 Rating: Outstanding First Name: Prince Surname: Patel Father's Name: Rakeshbhai Employee ID: MD-601 Department: Mobile Dev Role: Flutter Dev Q1 Tasks: 45 Q1 Bugs Fixed: 10 Rating: Good",
+      "saved_to": "D:\\Pooja\\project\\AI_DMS\\output\\Amit\\Verma\\Anil_Verma_DS-401\\employee_performance_report.xlsx",
+      "folder": "output/Amit/Verma/Anil_Verma_DS-401"
+    },
+    {
+      "timestamp": "2026-03-31 10:43:46",
+      "file": "english_pooja_patel.docx",
+      "file_type": "document",
+      "original_lang": "en",
+      "was_translated": false,
+      "entities": {
+        "first_name": null,
+        "surname": null,
+        "father_name": "| Bhadhreshkumar Patel",
+        "unique_id": {
+          "type": "ID",
+          "value": "logies"
+        },
+        "dob": null,
+        "email": "pooja.patel@company.com",
+        "phone": null,
+        "department": "| Software Development"
+      },
+      "summary": "Employee Information Form This employee has demonstrated exceptional skill in frontend technologies including React and TypeScript. Her performance in Q1 2025 was rated Outstanding by her manager. First Name: | Pooja Surname: | Patel Father's Name: | Bhadhreshkumar Patel Employee ID: | DEV-402 Department: | Software Development Role: | Frontend Engineer Date of Joining: | 15-Aug-2021 Email: | pooja.patel@company.com",
+      "saved_to": "D:\\Pooja\\project\\AI_DMS\\output\\Unknown\\Unknown\\Bhadhreshkumar_Patel_logies\\english_pooja_patel.docx",
+      "folder": "output/Unknown/Unknown/Bhadhreshkumar_Patel_logies"
+    },
+    {
+      "timestamp": "2026-03-31 10:43:46",
+      "file": "french_priya_shah.txt",
+      "file_type": "document",
+      "original_lang": "en",
+      "was_translated": false,
+      "entities": {
+        "first_name": "Priya",
+        "surname": "Shah",
+        "father_name": "Dinesh Shah",
+        "unique_id": {
+          "type": "Emp ID",
+          "value": "HR-901"
+        },
+        "dob": null,
+        "email": "priya.shah@company.com",
+        "phone": null,
+        "department": "Ressources Humaines (HR)"
+      },
+      "summary": "Formulaire d'Information sur l'Employé First Name: Priya Surname: Shah Father's Name: Dinesh Shah Employee ID: HR-901 Department: Ressources Humaines (HR) Role: Responsable RH Senior Email: priya.shah@company.com Résumé du Rapport: Priya Shah est une professionnelle RH expérimentée avec plus de 5 ans d'expérience. Elle gère le recrutement et le développement des talents pour toute l'organisation. Sa performance est évaluée comme Excellente par la direction.",
+      "saved_to": "D:\\Pooja\\project\\AI_DMS\\output\\Priya\\Shah\\Dinesh_Shah_HR-901\\french_priya_shah.txt",
+      "folder": "output/Priya/Shah/Dinesh_Shah_HR-901"
+    },
+    {
+      "timestamp": "2026-03-31 10:43:50",
+      "file": "gujarati_hardik_pandya.docx",
+      "file_type": "document",
+      "original_lang": "gu",
+      "was_translated": true,
+      "entities": {
+        "first_name": null,
+        "surname": null,
+        "father_name": "ft. He has automated 15+ deployment workflows in 2025.",
+        "unique_id": {
+          "type": "Unknown",
+          "value": null
+        },
+        "dob": null,
+        "email": "hardik.pandya@company.com",
+        "phone": null,
+        "department": "| DevOps"
+      },
+      "summary": "Employee Information Form This employee is an expert in DevOps field. This employee is an expert in DevOps and manages CI/CD pipelines for all projects at Pavitrasoft. First Name: | Hardik Surname: | Pandya Father's Name (Father): | Rameshbhai Pandya Employee ID (ID): | DEV-501 Department: | DevOps Email: | hardik.pandya@company.com",
+      "saved_to": "D:\\Pooja\\project\\AI_DMS\\output\\Unknown\\Unknown\\ft._He_has_automated_15+_deployment_work_NoID\\gujarati_hardik_pandya.docx",
+      "folder": "output/Unknown/Unknown/ft._He_has_automated_15+_deployment_work_NoID"
+    },
+    {
+      "timestamp": "2026-03-31 10:43:52",
+      "file": "hindi_rahul_sharma.docx",
+      "file_type": "document",
+      "original_lang": "hi",
+      "was_translated": true,
+      "entities": {
+        "first_name": null,
+        "surname": null,
+        "father_name": "Rajesh Sharma",
+        "unique_id": {
+          "type": "Unknown",
+          "value": null
+        },
+        "dob": null,
+        "email": "rahul.sharma@company.com",
+        "phone": null,
+        "department": "| UI/UX Design"
+      },
+      "summary": "employee information form This employee is an expert in UI/UX design. This employee specializes in UI/UX design and has completed the full dashboard layout for the SensorLive project in Q1 2025. First Name: | Rahul Surname: | Sharma Father's Name: Rajesh Sharma Employee ID: | EMP-301 Department: | UI/UX Design Email: | rahul.sharma@company.com",
+      "saved_to": "D:\\Pooja\\project\\AI_DMS\\output\\Unknown\\Unknown\\Rajesh_Sharma_NoID\\hindi_rahul_sharma.docx",
+      "folder": "output/Unknown/Unknown/Rajesh_Sharma_NoID"
+    },
+    {
+      "timestamp": "2026-03-31 10:43:52",
+      "file": "neha_singh_report.pdf",
+      "file_type": "pdf",
+      "original_lang": "en",
+      "was_translated": false,
+      "entities": {
+        "first_name": "Neha",
+        "surname": "Singh",
+        "father_name": "Manoj Singh",
+        "unique_id": {
+          "type": "Emp ID",
+          "value": "BE-303"
+        },
+        "dob": null,
+        "email": "neha.singh@company.com",
+        "phone": null,
+        "department": "Backend / IoT"
+      },
+      "summary": "Employee Performance Report Pavitrasoft Pvt. | Q1 2025 First Name: Neha Surname: Singh Father's Name: Manoj Singh Employee ID: BE-303 Department: Backend / IoT Role: IoT Architect Email: neha.singh@company.com Q1 Tasks: 60 Completed Rating: Outstanding Summary: Neha Singh is a highly skilled IoT Architect in the Backend team at Pavitrasoft. She successfully led the SensorLive Integration project, completing 60 tasks in Q1 2025 with zero critical bugs.",
+      "saved_to": "D:\\Pooja\\project\\AI_DMS\\output\\Neha\\Singh\\Manoj_Singh_BE-303\\neha_singh_report.pdf",
+      "folder": "output/Neha/Singh/Manoj_Singh_BE-303"
+    },
+    {
+      "timestamp": "2026-03-31 10:43:52",
+      "file": "spanish_raj_mehta.txt",
+      "file_type": "document",
+      "original_lang": "en",
+      "was_translated": false,
+      "entities": {
+        "first_name": "Raj",
+        "surname": "Mehta",
+        "father_name": "Sunil Mehta",
+        "unique_id": {
+          "type": "Emp ID",
+          "value": "FIN-101"
+        },
+        "dob": null,
+        "email": "raj.mehta@company.com",
+        "phone": null,
+        "department": "Finanzas (Finance)"
+      },
+      "summary": "Formulario de Información del Empleado First Name: Raj Surname: Mehta Father's Name: Sunil Mehta Employee ID: FIN-101 Department: Finanzas (Finance) Role: Analista Financiero Senior Email: raj.mehta@company.com Resumen del Informe: Raj Mehta es un analista financiero altamente competente con experiencia en contabilidad corporativa y análisis de inversiones. Durante el primer trimestre de 2025, completó con éxito la auditoría anual y presentó el informe de presupuesto al directorio. The AI system will auto-detect and translate it.",
+      "saved_to": "D:\\Pooja\\project\\AI_DMS\\output\\Raj\\Mehta\\Sunil_Mehta_FIN-101\\spanish_raj_mehta.txt",
+      "folder": "output/Raj/Mehta/Sunil_Mehta_FIN-101"
+    }
+  ]
+}

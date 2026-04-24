@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-03-31 10:43:52",
+  "file": "neha_singh_report.pdf",
+  "file_type": "pdf",
+  "original_lang": "en",
+  "was_translated": false,
+  "entities": {
+    "first_name": "Neha",
+    "surname": "Singh",
+    "father_name": "Manoj Singh",
+    "unique_id": {
+      "type": "Emp ID",
+      "value": "BE-303"
+    },
+    "dob": null,
+    "email": "neha.singh@company.com",
+    "phone": null,
+    "department": "Backend / IoT"
+  },
+  "summary": "Employee Performance Report Pavitrasoft Pvt. | Q1 2025 First Name: Neha Surname: Singh Father's Name: Manoj Singh Employee ID: BE-303 Department: Backend / IoT Role: IoT Architect Email: neha.singh@company.com Q1 Tasks: 60 Completed Rating: Outstanding Summary: Neha Singh is a highly skilled IoT Architect in the Backend team at Pavitrasoft. She successfully led the SensorLive Integration project, completing 60 tasks in Q1 2025 with zero critical bugs.",
+  "saved_to": "D:\\Pooja\\project\\AI_DMS\\output\\Neha\\Singh\\Manoj_Singh_BE-303\\neha_singh_report.pdf",
+  "folder": "output/Neha/Singh/Manoj_Singh_BE-303"
+}

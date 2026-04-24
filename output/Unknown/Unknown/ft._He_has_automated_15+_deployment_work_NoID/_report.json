@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-03-31 10:43:50",
+  "file": "gujarati_hardik_pandya.docx",
+  "file_type": "document",
+  "original_lang": "gu",
+  "was_translated": true,
+  "entities": {
+    "first_name": null,
+    "surname": null,
+    "father_name": "ft. He has automated 15+ deployment workflows in 2025.",
+    "unique_id": {
+      "type": "Unknown",
+      "value": null
+    },
+    "dob": null,
+    "email": "hardik.pandya@company.com",
+    "phone": null,
+    "department": "| DevOps"
+  },
+  "summary": "Employee Information Form This employee is an expert in DevOps field. This employee is an expert in DevOps and manages CI/CD pipelines for all projects at Pavitrasoft. First Name: | Hardik Surname: | Pandya Father's Name (Father): | Rameshbhai Pandya Employee ID (ID): | DEV-501 Department: | DevOps Email: | hardik.pandya@company.com",
+  "saved_to": "D:\\Pooja\\project\\AI_DMS\\output\\Unknown\\Unknown\\ft._He_has_automated_15+_deployment_work_NoID\\gujarati_hardik_pandya.docx",
+  "folder": "output/Unknown/Unknown/ft._He_has_automated_15+_deployment_work_NoID"
+}

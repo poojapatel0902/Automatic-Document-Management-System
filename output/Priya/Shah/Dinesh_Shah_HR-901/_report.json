@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-03-31 10:43:46",
+  "file": "french_priya_shah.txt",
+  "file_type": "document",
+  "original_lang": "en",
+  "was_translated": false,
+  "entities": {
+    "first_name": "Priya",
+    "surname": "Shah",
+    "father_name": "Dinesh Shah",
+    "unique_id": {
+      "type": "Emp ID",
+      "value": "HR-901"
+    },
+    "dob": null,
+    "email": "priya.shah@company.com",
+    "phone": null,
+    "department": "Ressources Humaines (HR)"
+  },
+  "summary": "Formulaire d'Information sur l'Employé First Name: Priya Surname: Shah Father's Name: Dinesh Shah Employee ID: HR-901 Department: Ressources Humaines (HR) Role: Responsable RH Senior Email: priya.shah@company.com Résumé du Rapport: Priya Shah est une professionnelle RH expérimentée avec plus de 5 ans d'expérience. Elle gère le recrutement et le développement des talents pour toute l'organisation. Sa performance est évaluée comme Excellente par la direction.",
+  "saved_to": "D:\\Pooja\\project\\AI_DMS\\output\\Priya\\Shah\\Dinesh_Shah_HR-901\\french_priya_shah.txt",
+  "folder": "output/Priya/Shah/Dinesh_Shah_HR-901"
+}
