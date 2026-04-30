@@ -15,6 +15,31 @@ LOG_DIR       = os.path.join(BASE_DIR, "logs")
 for d in [OUTPUT_DIR, SAMPLE_DIR, LOG_DIR]:
     os.makedirs(d, exist_ok=True)
 
+
+def load_env_file(path=None):
+    """
+    Load simple KEY=VALUE pairs from .env without requiring extra packages.
+    Existing system environment values are kept unchanged.
+    """
+    env_path = path or os.path.join(BASE_DIR, ".env")
+    if not os.path.exists(env_path):
+        return
+
+    with open(env_path, "r", encoding="utf-8") as env_file:
+        for raw_line in env_file:
+            line = raw_line.strip()
+            if not line or line.startswith("#") or "=" not in line:
+                continue
+
+            key, value = line.split("=", 1)
+            key = key.strip()
+            value = value.strip().strip('"').strip("'")
+            if key:
+                os.environ.setdefault(key, value)
+
+
+load_env_file()
+
 # ---- SUPPORTED FILE TYPES ----
 SUPPORTED_FORMATS = {
     "document" : [".docx", ".txt"],

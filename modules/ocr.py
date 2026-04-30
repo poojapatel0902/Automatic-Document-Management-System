@@ -1791,6 +1791,45 @@ def _ui_build_marksheet_additional_info(raw_text, details):
     return extra
 
 
+def format_extracted_text_for_display(raw_text, details=None):
+    text = raw_text or ""
+    prepared = dict(details or {})
+
+    if prepared.get("doc_type") == "marksheet" or _ui_looks_like_marksheet_text(text):
+        full_name = _ui_extract_marksheet_full_name(text, details=prepared)
+        exam_name = _ui_extract_marksheet_exam_name(text)
+        header_fields = _ui_extract_marksheet_header_fields(text)
+        grand_total = _ui_extract_marksheet_grand_total(text)
+        final_grade = _ui_extract_marksheet_final_grade(text)
+        percentile_rank = _ui_extract_marksheet_percentile(text)
+        result_status = _ui_extract_marksheet_result_status(text)
+        extra = dict(prepared.get("extra", {}) or {})
+
+        ordered_fields = [
+            ("Board", "Gujarat Secondary & Higher Secondary Education Board, Gandhinagar"),
+            ("Document", "Statement of Marks"),
+            ("Candidate Name", full_name.upper() if full_name else ""),
+            ("Exam Name", exam_name),
+            ("Month & Year Of Exam", header_fields.get("month_year_of_exam", "")),
+            ("Seat No", header_fields.get("seat_no", "")),
+            ("Centre Number", header_fields.get("centre_number", "")),
+            ("School Index No", header_fields.get("school_index_no", "")),
+            ("Statement No", header_fields.get("statement_no", "") or extra.get("statement_no", "")),
+            ("S.I.D. No", extra.get("sid_no", "")),
+            ("Grand Total", grand_total),
+            ("Grade", final_grade),
+            ("Percentile Rank", percentile_rank),
+            ("Result", result_status),
+        ]
+
+        lines = [f"{label}: {value}" for label, value in ordered_fields if _ui_clean_display_value(value)]
+        if lines:
+            return "\n".join(lines)
+
+    cleaned_lines = _ui_iter_clean_lines(text)
+    return "\n".join(cleaned_lines)
+
+
 def prepare_display_details(details, raw_text, doc_summary):
     prepared = dict(details or {})
     display_doc_type = prepared.get("doc_type", "generic")

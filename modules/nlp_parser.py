@@ -344,6 +344,7 @@ GENERIC_NAME_BLOCK_WORDS = {
     "item", "amount", "total", "subtotal", "qty", "quantity", "price", "rate",
     "description", "product", "service", "gst", "tax", "taxable", "balance",
     "bill", "invoice", "order", "unit", "value", "table", "date",
+    "id", "email", "phone", "mobile", "department", "form",
 }
 
 PERSON_CONTEXT_HINTS = (
@@ -381,6 +382,294 @@ def _is_safe_generic_name_words(words, text, line_index=0):
 
 def _clean_capture(value):
     return re.sub(r"\s+", " ", str(value or "")).strip(" |:-")
+
+
+MULTILINGUAL_LABEL_PATTERNS = {
+    "first_name": [
+        r"first\s*name",
+        r"given\s*name",
+        r"પ્રથમ\s*નામ",
+        r"નામ",
+        r"प्रथम\s*नाम",
+        r"पहला\s*नाम",
+        r"पहले\s*नाम",
+    ],
+    "surname": [
+        r"surname",
+        r"sur\s*name",
+        r"last\s*name",
+        r"family\s*name",
+        r"અટક",
+        r"સરનેમ",
+        r"ઉપનામ",
+        r"અંતિમ\s*નામ",
+        r"उपनाम",
+        r"सरनेम",
+        r"अंतिम\s*नाम",
+    ],
+    "father_name": [
+        r"father'?s?\s*name",
+        r"father\s*name",
+        r"middle\s*name",
+        r"પિતાનું\s*નામ",
+        r"\bપિતા\b",
+        r"पिता\s*का\s*नाम",
+        r"\bपिता\b",
+        r"मध्य\s*नाम",
+    ],
+    "full_name": [
+        r"full\s*name",
+        r"candidate'?s?\s*name",
+        r"student\s*name",
+        r"પૂર્ણ\s*નામ",
+        r"સંપૂર્ણ\s*નામ",
+        r"विद्यार्थी\s*का\s*नाम",
+        r"पूरा\s*नाम",
+        r"पूर्ण\s*नाम",
+    ],
+    "department": [
+        r"department",
+        r"dept",
+        r"division",
+        r"વિભાગ",
+        r"विभाग",
+    ],
+    "employee_id": [
+        r"employee\s*id",
+        r"emp\s*id",
+        r"staff\s*id",
+        r"\bid\b",
+        r"આઈડી",
+        r"आईडी",
+        r"आई\.डी",
+    ],
+}
+
+MULTILINGUAL_FORM_HINTS = [
+    r"માહિતી\s*ફોર્મ",
+    r"जानकारी\s*फॉर्म",
+    r"सूचना\s*फॉर्म",
+    r"information\s*form",
+]
+
+INDIC_INDEPENDENT_VOWELS = {
+    "अ": "a", "आ": "aa", "इ": "i", "ई": "i", "उ": "u", "ऊ": "u",
+    "ऋ": "ri", "ए": "e", "ऐ": "ai", "ओ": "o", "औ": "au",
+    "અ": "a", "આ": "aa", "ઇ": "i", "ઈ": "i", "ઉ": "u", "ઊ": "u",
+    "ઋ": "ri", "એ": "e", "ઐ": "ai", "ઓ": "o", "ઔ": "au",
+}
+
+INDIC_CONSONANTS = {
+    "क": "k", "ख": "kh", "ग": "g", "घ": "gh", "ङ": "n",
+    "च": "ch", "छ": "chh", "ज": "j", "झ": "jh", "ञ": "ny",
+    "ट": "t", "ठ": "th", "ड": "d", "ढ": "dh", "ण": "n",
+    "त": "t", "थ": "th", "द": "d", "ध": "dh", "न": "n",
+    "प": "p", "फ": "f", "ब": "b", "भ": "bh", "म": "m",
+    "य": "y", "र": "r", "ल": "l", "व": "v",
+    "श": "sh", "ष": "sh", "स": "s", "ह": "h", "ळ": "l",
+    "क़": "q", "फ़": "f", "ज़": "z", "ड़": "d", "ढ़": "dh",
+    "ક": "k", "ખ": "kh", "ગ": "g", "ઘ": "gh", "ઙ": "n",
+    "ચ": "ch", "છ": "chh", "જ": "j", "ઝ": "jh", "ઞ": "ny",
+    "ટ": "t", "ઠ": "th", "ડ": "d", "ઢ": "dh", "ણ": "n",
+    "ત": "t", "થ": "th", "દ": "d", "ધ": "dh", "ન": "n",
+    "પ": "p", "ફ": "f", "બ": "b", "ભ": "bh", "મ": "m",
+    "ય": "y", "ર": "r", "લ": "l", "વ": "v",
+    "શ": "sh", "ષ": "sh", "સ": "s", "હ": "h", "ળ": "l",
+}
+
+INDIC_VOWEL_SIGNS = {
+    "ा": "aa", "ि": "i", "ी": "i", "ु": "u", "ू": "u", "ृ": "ri",
+    "े": "e", "ै": "ai", "ो": "o", "ौ": "au",
+    "ા": "aa", "િ": "i", "ી": "i", "ુ": "u", "ૂ": "u", "ૃ": "ri",
+    "ે": "e", "ૈ": "ai", "ો": "o", "ૌ": "au",
+}
+
+INDIC_SIGNS = {
+    "ं": "n", "ँ": "n", "ः": "h",
+    "ં": "n", "ઁ": "n", "ઃ": "h",
+}
+
+INDIC_VIRAMAS = {"्", "્"}
+
+
+def _contains_indic_script(text):
+    return bool(re.search(r"[\u0900-\u097F\u0A80-\u0AFF]", text or ""))
+
+
+def _cleanup_transliterated_word(word):
+    cleaned = str(word or "").lower()
+    cleaned = cleaned.replace("aai", "ai").replace("ee", "i").replace("oo", "u")
+    cleaned = cleaned.replace("aa", "a")
+    cleaned = cleaned.replace("ii", "i").replace("uu", "u")
+    cleaned = re.sub(r"yya\b", "ya", cleaned)
+    cleaned = re.sub(r"([a-z])haa\b", r"\1ha", cleaned)
+    if len(cleaned) > 5 and re.search(r"(ika|aka|uka|ega|oga|aka|sha|bha|dha|tha|ka|ga|da|ta|na|pa|ba|ma|la|ra|sa|ha)\b", cleaned):
+        cleaned = re.sub(r"a\b", "", cleaned)
+    return cleaned.title()
+
+
+def _romanize_indic_text(text):
+    if not _contains_indic_script(text):
+        return _clean_capture(text)
+
+    output = []
+    index = 0
+    text = str(text or "")
+
+    while index < len(text):
+        char = text[index]
+
+        if char in INDIC_INDEPENDENT_VOWELS:
+            output.append(INDIC_INDEPENDENT_VOWELS[char])
+            index += 1
+            continue
+
+        if char in INDIC_CONSONANTS:
+            piece = INDIC_CONSONANTS[char]
+            next_index = index + 1
+            suffix = "a"
+
+            if next_index < len(text):
+                next_char = text[next_index]
+                if next_char in INDIC_VOWEL_SIGNS:
+                    suffix = INDIC_VOWEL_SIGNS[next_char]
+                    index += 1
+                elif next_char in INDIC_VIRAMAS:
+                    suffix = ""
+                    index += 1
+
+            output.append(piece + suffix)
+            index += 1
+            continue
+
+        if char in INDIC_SIGNS:
+            output.append(INDIC_SIGNS[char])
+            index += 1
+            continue
+
+        output.append(char)
+        index += 1
+
+    transliterated = re.sub(r"\s+", " ", "".join(output)).strip()
+    words = [
+        _cleanup_transliterated_word(word) if re.search(r"[A-Za-z]", word) else word
+        for word in transliterated.split()
+    ]
+    return " ".join(words).strip()
+
+
+def _translate_value_to_english(value):
+    cleaned = _clean_capture(value)
+    if not cleaned:
+        return ""
+    if not _contains_indic_script(cleaned):
+        return cleaned
+
+    try:
+        translated = GoogleTranslator(source="auto", target="en").translate(cleaned)
+        translated = _clean_capture(translated)
+        if translated and re.search(r"[A-Za-z]", translated):
+            return translated
+    except Exception:
+        pass
+
+    return _romanize_indic_text(cleaned)
+
+
+def _extract_multilingual_line_value(lines, label_patterns):
+    label_union = "|".join(f"(?:{pattern})" for pattern in label_patterns)
+
+    for index, line in enumerate(lines):
+        if not re.search(label_union, line, re.I):
+            continue
+
+        candidate = re.sub(
+            rf".*?(?:{label_union})(?:\s*\([^)]*\))?\s*[:：\-|]?\s*",
+            "",
+            line,
+            flags=re.I,
+        ).strip(" |:-")
+        candidate = re.sub(r"^\([^)]*\)\s*", "", candidate).strip(" |:-")
+        candidate = re.sub(r"^[\)\]\}\s:：\-|]+", "", candidate).strip(" |:-")
+
+        if not candidate and index + 1 < len(lines):
+            candidate = lines[index + 1].strip(" |:-")
+
+        if candidate:
+            return candidate
+
+    return ""
+
+
+def _extract_multilingual_labeled_fields(text):
+    lines = [line.strip() for line in re.split(r"[\r\n]+", text or "") if line.strip()]
+    extracted = {}
+
+    for field_name, patterns in MULTILINGUAL_LABEL_PATTERNS.items():
+        value = _extract_multilingual_line_value(lines, patterns)
+        if not value:
+            continue
+
+        if field_name in {"first_name", "surname", "father_name", "full_name", "department"}:
+            value = _translate_value_to_english(value)
+        else:
+            value = _clean_capture(value)
+
+        if value:
+            extracted[field_name] = value
+
+    email_match = re.search(r"[\w\.\+\-]+@[\w\-]+\.[a-z]{2,}", text or "", re.I)
+    if email_match:
+        extracted["email"] = email_match.group(0).strip()
+
+    phone_match = re.search(r"(?:\+?\d[\d\-\s]{8,}\d)", text or "")
+    if phone_match:
+        digits_only = re.sub(r"\D", "", phone_match.group(0))
+        if len(digits_only) >= 10:
+            extracted["phone"] = digits_only[-10:]
+
+    id_value = _extract_multilingual_line_value(lines, MULTILINGUAL_LABEL_PATTERNS["employee_id"])
+    if id_value:
+        id_value = _clean_capture(id_value)
+        id_match = re.search(r"[A-Z0-9][A-Z0-9\-]{3,25}", id_value, re.I)
+        if id_match:
+            extracted["employee_id"] = id_match.group(0).upper()
+
+    surname = extracted.get("surname")
+    father_name = extracted.get("father_name")
+    if surname and father_name:
+        lowered_father = father_name.lower().strip()
+        lowered_surname = surname.lower().strip()
+        if lowered_father.endswith(" " + lowered_surname):
+            extracted["father_name"] = father_name[: -len(surname)].strip()
+
+    return extracted
+
+
+def _build_multilingual_english_hint_text(raw_text):
+    hints = _extract_multilingual_labeled_fields(raw_text)
+    lines = []
+
+    if hints:
+        lines.append("Information Form")
+    if hints.get("first_name"):
+        lines.append(f"First Name: {hints['first_name']}")
+    if hints.get("surname"):
+        lines.append(f"Surname: {hints['surname']}")
+    if hints.get("father_name"):
+        lines.append(f"Father's Name: {hints['father_name']}")
+    if hints.get("full_name"):
+        lines.append(f"Full Name: {hints['full_name']}")
+    if hints.get("employee_id"):
+        lines.append(f"Employee ID: {hints['employee_id']}")
+    if hints.get("department"):
+        lines.append(f"Department: {hints['department']}")
+    if hints.get("email"):
+        lines.append(f"Email: {hints['email']}")
+    if hints.get("phone"):
+        lines.append(f"Phone: {hints['phone']}")
+
+    return "\n".join(lines).strip()
 
 
 def _normalize_marksheet_text(text):
@@ -1617,67 +1906,115 @@ def smart_parse(raw_text):
     except Exception:
         english_text = raw_text
 
-    doc_type = detect_doc_type(english_text)
+    multilingual_hint_text = _build_multilingual_english_hint_text(raw_text)
+    if multilingual_hint_text:
+        working_text = f"{multilingual_hint_text}\n{english_text}"
+    else:
+        working_text = english_text
+
+    doc_type = detect_doc_type(working_text)
 
     if doc_type == "certificate":
-        extracted = parse_certificate(english_text)
+        extracted = parse_certificate(working_text)
 
     elif doc_type == "ticket":
-        extracted = parse_ticket(english_text)
+        extracted = parse_ticket(working_text)
 
     elif doc_type == "employee_form":
-        extracted = parse_employee_form(english_text)
+        extracted = parse_employee_form(working_text)
 
     elif doc_type == "report":
-        extracted = parse_report(english_text)
-        labeled = parse_employee_form(english_text)
+        extracted = parse_report(working_text)
+        labeled = parse_employee_form(working_text)
         for k, v in labeled.items():
             if k not in extracted:
                 extracted[k] = v
 
     elif doc_type == "marksheet":
-        extracted = parse_marksheet(english_text)
-        extracted = _enforce_marksheet_name_order(extracted, english_text)
+        extracted = parse_marksheet(working_text)
+        extracted = _enforce_marksheet_name_order(extracted, working_text)
         extracted = _prefer_raw_marksheet_names(raw_text, extracted)
 
     else:
-        extracted = parse_employee_form(english_text)
+        extracted = parse_employee_form(working_text)
         if not extracted.get("first_name"):
-            cert_try = parse_certificate(english_text)
+            cert_try = parse_certificate(working_text)
             for k, v in cert_try.items():
                 if k not in extracted:
                     extracted[k] = v
         if not extracted.get("first_name"):
-            mark_try = parse_marksheet(english_text)
-            mark_try = _enforce_marksheet_name_order(mark_try, english_text)
+            mark_try = parse_marksheet(working_text)
+            mark_try = _enforce_marksheet_name_order(mark_try, working_text)
             mark_try = _prefer_raw_marksheet_names(raw_text, mark_try)
             for k, v in mark_try.items():
                 if k not in extracted:
                     extracted[k] = v
 
+    multilingual_fields = _extract_multilingual_labeled_fields(raw_text)
+    if multilingual_fields.get("first_name") and not extracted.get("first_name"):
+        extracted["first_name"] = multilingual_fields["first_name"]
+    if multilingual_fields.get("surname") and not extracted.get("surname"):
+        extracted["surname"] = multilingual_fields["surname"]
+    if multilingual_fields.get("father_name") and not extracted.get("father_name"):
+        extracted["father_name"] = multilingual_fields["father_name"]
+    if multilingual_fields.get("full_name") and not extracted.get("full_name"):
+        extracted["full_name"] = multilingual_fields["full_name"]
+    if multilingual_fields.get("department") and not extracted.get("department"):
+        extracted["department"] = multilingual_fields["department"]
+    if multilingual_fields.get("email") and not extracted.get("email"):
+        extracted["email"] = multilingual_fields["email"]
+    if multilingual_fields.get("phone") and not extracted.get("phone"):
+        extracted["phone"] = multilingual_fields["phone"]
+    if multilingual_fields.get("employee_id") and not extracted.get("employee_id"):
+        extracted["employee_id"] = multilingual_fields["employee_id"]
+
     extracted = _sanitize_extracted(extracted)
 
     if doc_type != "marksheet" and not extracted.get("first_name"):
-        generic = parse_generic_name(english_text)
+        generic = parse_generic_name(working_text)
         for k, v in generic.items():
             if k not in extracted:
                 extracted[k] = v
 
     uid_dict = extracted.get("unique_id")
     if not uid_dict:
-        uid_type, uid_val = find_unique_id(english_text)
+        uid_type, uid_val = find_unique_id(working_text)
+        if (not uid_val) and multilingual_fields.get("employee_id"):
+            uid_type, uid_val = "Employee ID", multilingual_fields["employee_id"]
         uid_dict = {"type": uid_type, "value": uid_val}
+
+    display_date = (
+        extracted.get("dob")
+        or extracted.get("travel_date")
+        or extracted.get("result_declared_on")
+        or extracted.get("month_year_of_exam")
+        or extracted.get("date")
+    )
+
+    full_name = extracted.get("full_name")
+    if not full_name:
+        name_parts = [
+            extracted.get("first_name"),
+            extracted.get("father_name"),
+            extracted.get("surname"),
+        ]
+        full_name = " ".join(part for part in name_parts if part)
 
     result = {
         "First Name": extracted.get("first_name", "Not Found") or "Not Found",
+        "Middle Name": extracted.get("father_name", "Not Found") or "Not Found",
+        "Last Name": extracted.get("surname", "Not Found") or "Not Found",
+        "Full Name": full_name or "Not Found",
         "Surname": extracted.get("surname", "Not Found") or "Not Found",
         "Father's Name": extracted.get("father_name", "Not Found") or "Not Found",
+        "Date": display_date or "Not Found",
         "Email": extracted.get("email", "Not Found") or "Not Found",
+        "Phone": extracted.get("phone", "Not Found") or "Not Found",
         "Department": extracted.get("department", "Not Found") or "Not Found",
         "ID": (uid_dict.get("value") if uid_dict else None) or "Not Found",
         "ID_Type": (uid_dict.get("type") if uid_dict else None) or "ID",
         "doc_type": doc_type,
-        "_translated": english_text,
+        "_translated": working_text,
     }
 
     extra_keys = [
@@ -1729,7 +2066,19 @@ def extract_from_filename(filename):
 def smart_merge(doc_det, file_det):
     merged = {}
 
-    for f in ["First Name", "Surname", "Father's Name", "Email", "Department", "ID"]:
+    for f in [
+        "First Name",
+        "Middle Name",
+        "Last Name",
+        "Full Name",
+        "Surname",
+        "Father's Name",
+        "Date",
+        "Email",
+        "Phone",
+        "Department",
+        "ID",
+    ]:
         dv = doc_det.get(f, "Not Found")
         fv = file_det.get(f, "Not Found")
         merged[f] = dv if dv != "Not Found" else (fv if fv != "Not Found" else "Not Found")
