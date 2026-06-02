@@ -4,6 +4,7 @@
 # ============================================
 
 import os
+import sys
 
 # ---- PATHS ----
 BASE_DIR      = os.path.dirname(os.path.abspath(__file__))
@@ -95,4 +96,10 @@ class Colors:
     RESET  = "\033[0m"
 
 def cprint(msg, color=Colors.RESET):
-    print(f"{color}{msg}{Colors.RESET}")
+    text = f"{color}{msg}{Colors.RESET}"
+    try:
+        print(text)
+    except UnicodeEncodeError:
+        encoding = sys.stdout.encoding or "utf-8"
+        safe_text = text.encode(encoding, errors="replace").decode(encoding, errors="replace")
+        print(safe_text)

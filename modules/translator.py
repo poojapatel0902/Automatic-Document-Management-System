@@ -6,6 +6,7 @@
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import Colors, cprint, SUPPORTED_LANGUAGES
+from modules.multilingual import process_multilingual_text, transliterate_name_to_english
 
 def detect_language(text):
     """Auto-detect language from text"""

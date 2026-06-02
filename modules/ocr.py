@@ -12,9 +12,12 @@ import tempfile
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import Colors, cprint, TESSERACT_PATH
+from modules.multilingual import log_indicator
 
 
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".bmp", ".tif", ".tiff", ".webp"}
+REQUESTED_TESSERACT_LANGS = ("eng", "hin", "guj")
+_TESSERACT_LANG_CACHE = None
 OCR_HINT_WORDS = {
     "name", "student", "candidate", "father", "department", "email", "id",
     "enrollment", "enrolment", "registration", "program", "college", "exam",
@@ -87,12 +90,48 @@ def _score_ocr_text(text):
         return -1
 
     lowered = text.lower()
-    score = len(re.findall(r"[A-Za-z0-9]", text))
+    score = len(re.findall(r"[A-Za-z0-9\u0900-\u097F\u0A80-\u0AFF]", text))
     score += sum(25 for word in OCR_HINT_WORDS if word in lowered)
     score += 15 * len(re.findall(r"\b\d{4,}\b", text))
     score += 5 * len(re.findall(r"[A-Za-z]{3,}", text))
     score -= 20 * len(re.findall(r"[^\w\s]{3,}", text))
     return score
+
+
+def _set_tesseract_command(pytesseract):
+    if os.name == "nt" and os.path.exists(TESSERACT_PATH):
+        pytesseract.pytesseract.tesseract_cmd = TESSERACT_PATH
+
+
+def _resolve_tesseract_languages(pytesseract):
+    global _TESSERACT_LANG_CACHE
+
+    if _TESSERACT_LANG_CACHE:
+        return _TESSERACT_LANG_CACHE
+
+    requested = list(REQUESTED_TESSERACT_LANGS)
+    try:
+        available_languages = set(pytesseract.get_languages(config=""))
+        missing = [lang for lang in requested if lang not in available_languages]
+        selected = [lang for lang in requested if lang in available_languages]
+
+        if missing:
+            cprint(
+                "  OCR warning: missing Tesseract traineddata for "
+                + ", ".join(missing)
+                + ". Install these language files for better Hindi/Gujarati OCR.",
+                Colors.YELLOW,
+            )
+        if not selected:
+            selected = ["eng"]
+
+        _TESSERACT_LANG_CACHE = "+".join(selected)
+    except Exception as exc:
+        cprint(f"  OCR warning: could not check Tesseract languages ({exc}).", Colors.YELLOW)
+        _TESSERACT_LANG_CACHE = "eng+hin+guj"
+
+    log_indicator("ocr_language", tesseract_lang=_TESSERACT_LANG_CACHE)
+    return _TESSERACT_LANG_CACHE
 
 
 def _choose_best_ocr_result(candidates):
@@ -129,10 +168,16 @@ def _generate_ocr_variants(image):
 
     base = image.convert("RGB")
     gray = ImageOps.autocontrast(base.convert("L"))
+    cropped = _trim_document_border(gray)
+    deskewed = _deskew_image(cropped)
     high_contrast = ImageEnhance.Contrast(gray).enhance(2.4)
+    high_contrast_cropped = ImageEnhance.Contrast(deskewed).enhance(2.4)
     sharp = high_contrast.filter(ImageFilter.SHARPEN)
+    sharp_cropped = high_contrast_cropped.filter(ImageFilter.SHARPEN)
     denoise = sharp.filter(ImageFilter.MedianFilter(size=3))
+    denoise_cropped = sharp_cropped.filter(ImageFilter.MedianFilter(size=3))
     binary = denoise.point(lambda p: 255 if p > 160 else 0)
+    adaptive_binary = denoise_cropped.point(lambda p: 255 if p > 145 else 0)
     inverted_binary = ImageOps.invert(binary)
 
     variants = []
@@ -140,9 +185,13 @@ def _generate_ocr_variants(image):
 
     for label, variant in [
         ("base", base),
+        ("deskewed_crop", deskewed),
         ("sharp_gray", sharp),
+        ("sharp_crop", sharp_cropped),
         ("denoise", denoise),
+        ("denoise_crop", denoise_cropped),
         ("binary", binary),
+        ("adaptive_binary", adaptive_binary),
         ("binary_invert", inverted_binary),
     ]:
         resized = variant.resize(
@@ -152,6 +201,61 @@ def _generate_ocr_variants(image):
         variants.append((label, resized))
 
     return variants
+
+
+def _trim_document_border(gray_image):
+    from PIL import ImageOps
+
+    try:
+        gray = ImageOps.autocontrast(gray_image.convert("L"))
+        mask = gray.point(lambda pixel: 0 if pixel > 245 else 255)
+        bbox = mask.getbbox()
+        if not bbox:
+            return gray
+
+        width, height = gray.size
+        left, top, right, bottom = bbox
+        crop_width = right - left
+        crop_height = bottom - top
+        if crop_width * crop_height < width * height * 0.25:
+            return gray
+
+        padding = max(8, int(min(width, height) * 0.02))
+        return gray.crop(
+            (
+                max(left - padding, 0),
+                max(top - padding, 0),
+                min(right + padding, width),
+                min(bottom + padding, height),
+            )
+        )
+    except Exception:
+        return gray_image.convert("L")
+
+
+def _deskew_image(gray_image):
+    try:
+        import cv2
+        import numpy as np
+
+        gray = np.array(gray_image.convert("L"))
+        gray = cv2.bitwise_not(gray)
+        threshold = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+        coords = np.column_stack(np.where(threshold > 0))
+        if coords.size == 0:
+            return gray_image
+
+        angle = cv2.minAreaRect(coords)[-1]
+        if angle < -45:
+            angle = -(90 + angle)
+        else:
+            angle = -angle
+        if abs(angle) < 0.5 or abs(angle) > 12:
+            return gray_image
+
+        return gray_image.rotate(angle, expand=True, fillcolor=255)
+    except Exception:
+        return gray_image
 
 
 def _bbox_bounds(box):
@@ -393,22 +497,25 @@ def perform_ocr_pytesseract(image):
     try:
         import pytesseract
 
-        # Tesseract path set karo (Windows ke liye)
-        if os.name == "nt" and os.path.exists(TESSERACT_PATH):
-            pytesseract.pytesseract.tesseract_cmd = TESSERACT_PATH
+        _set_tesseract_command(pytesseract)
+        primary_lang = _resolve_tesseract_languages(pytesseract)
 
         # File path diya hai? Open karo
         image = _load_image(image)
         attempts = []
 
-        # Image enhance karo (better OCR accuracy)
         for _, variant in _generate_ocr_variants(image):
-            for lang, config in [
-                ("eng+hin", "--psm 6 --oem 3"),
-                ("eng+hin", "--psm 11 --oem 3"),
-                ("eng", "--psm 6"),
-                ("eng", "--psm 11"),
-            ]:
+            language_attempts = [
+                (primary_lang, "--psm 6 --oem 3 --dpi 300"),
+                (primary_lang, "--psm 11 --oem 3 --dpi 300"),
+            ]
+            if primary_lang != "eng":
+                language_attempts.extend([
+                    ("eng", "--psm 6 --oem 3 --dpi 300"),
+                    ("eng", "--psm 11 --oem 3 --dpi 300"),
+                ])
+
+            for lang, config in language_attempts:
                 try:
                     text = pytesseract.image_to_string(
                         variant,
@@ -447,7 +554,7 @@ def perform_ocr_pytesseract(image):
 # BACKUP OCR — EasyOCR (Better for Hindi/Regional)
 # ============================================
 
-def perform_ocr_easyocr(image_path, languages=["en", "hi"]):
+def perform_ocr_easyocr(image_path, languages=None):
     """
     EasyOCR se OCR karo — Hindi/Regional languages ke liye better!
     """
@@ -455,7 +562,23 @@ def perform_ocr_easyocr(image_path, languages=["en", "hi"]):
         import easyocr
 
         cprint("  🔍 EasyOCR loading (first time takes 1-2 min)...", Colors.CYAN)
-        reader = easyocr.Reader(languages, gpu=False)
+        language_sets = [languages] if languages else [["en", "hi", "gu"], ["en", "hi"], ["en"]]
+        reader = None
+        selected_languages = None
+        last_error = None
+        for language_set in language_sets:
+            try:
+                cprint("  EasyOCR loading for languages: " + "+".join(language_set), Colors.CYAN)
+                reader = easyocr.Reader(language_set, gpu=False)
+                selected_languages = language_set
+                break
+            except Exception as exc:
+                last_error = exc
+
+        if reader is None:
+            raise last_error or RuntimeError("EasyOCR reader could not be created")
+
+        log_indicator("ocr_language", easyocr_lang="+".join(selected_languages or []))
         image = _load_image(image_path)
         attempts = []
         structured_name_candidates = []

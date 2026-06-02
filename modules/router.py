@@ -157,6 +157,36 @@ def _is_usable_email(value):
     return bool(re.fullmatch(r"[^@\s]+@[^@\s]+\.[^@\s]+", text))
 
 
+# Email upgrade: parse comma/new-line separated receiver emails into a clean validated list.
+def _parse_receiver_emails(value):
+    if isinstance(value, (list, tuple, set)):
+        raw_values = []
+        for item in value:
+            raw_values.extend(re.split(r"[,\n]+", str(item or "")))
+    else:
+        raw_values = re.split(r"[,\n]+", str(value or ""))
+
+    valid_recipients = []
+    invalid_recipients = []
+    seen = set()
+
+    for raw_email in raw_values:
+        email = raw_email.strip()
+        if not email:
+            continue
+
+        if not _is_usable_email(email):
+            invalid_recipients.append(email)
+            continue
+
+        email_key = email.lower()
+        if email_key not in seen:
+            seen.add(email_key)
+            valid_recipients.append(email)
+
+    return valid_recipients, invalid_recipients
+
+
 def _resolve_document_recipient(documents):
     recipients = []
     for document in documents or []:
@@ -183,33 +213,22 @@ def _guess_mime_type(file_name):
 def _build_document_email_section(document):
     return "\n".join(
         [
-            f"File Name: {_clean_delivery_value(document.get('file_name'))}",
-            f"Extracted Name: {_clean_delivery_value(document.get('full_name'))}",
-            f"First Name: {_clean_delivery_value(document.get('first_name'))}",
-            f"Middle Name: {_clean_delivery_value(document.get('middle_name'))}",
-            f"Last Name: {_clean_delivery_value(document.get('last_name'))}",
-            f"Document Type: {_clean_delivery_value(document.get('document_type'))}",
-            f"Date: {_clean_delivery_value(document.get('date'))}",
-            f"Email: {_clean_delivery_value(document.get('email'))}",
-            f"Phone: {_clean_delivery_value(document.get('phone'))}",
-            "",
             "Short Summary:",
             _clean_delivery_value(document.get("summary")),
-            "",
-            "Raw Text:",
-            _clean_delivery_value(document.get("raw_text")),
         ]
     )
 
 
-def _build_single_document_email(document, recipient, sender):
+def _build_single_document_email(document, recipients, sender):
     message = EmailMessage()
     document_type = _clean_delivery_value(document.get("document_type")).upper()
     file_name = _clean_delivery_value(document.get("file_name"))
     full_name = _clean_delivery_value(document.get("full_name"))
 
     message["From"] = sender
-    message["To"] = recipient
+    # Email upgrade: hide all receivers by sending them through BCC.
+    message["To"] = sender
+    message["Bcc"] = ", ".join(recipients)
     message["Subject"] = f"ADMS | {file_name} | {document_type} | {full_name}"
     message.set_content(_build_document_email_section(document))
 
@@ -227,10 +246,12 @@ def _build_single_document_email(document, recipient, sender):
     return message
 
 
-def _build_combined_document_email(documents, recipient, sender):
+def _build_combined_document_email(documents, recipients, sender):
     message = EmailMessage()
     message["From"] = sender
-    message["To"] = recipient
+    # Email upgrade: keep receivers private from one another with BCC.
+    message["To"] = sender
+    message["Bcc"] = ", ".join(recipients)
     message["Subject"] = f"ADMS | Combined Document Summary | {len(documents)} document(s)"
 
     sections = []
@@ -463,14 +484,18 @@ def _resolve_email_delivery_settings(email_settings):
         or email_settings.get("from_email")
         or ""
     ).strip()
-    receiver_email = str(
-        email_settings.get("receiver_email")
+    # Email upgrade: accept the new multi-receiver field while keeping old keys compatible.
+    receiver_email = (
+        email_settings.get("receiver_emails")
+        or email_settings.get("receiver_email")
         or email_settings.get("recipient")
         or ""
-    ).strip()
+    )
 
-    inferred = _infer_smtp_settings(sender_email)
-    password, password_source = _resolve_email_password(sender_email)
+    password = str(email_settings.get("password") or "").strip()
+    password_source = "input" if password else ""
+    if not password:
+        password, password_source = _resolve_email_password(sender_email)
 
     return {
         "sender_email": sender_email,
@@ -478,10 +503,11 @@ def _resolve_email_delivery_settings(email_settings):
         "username": sender_email,
         "from_email": sender_email,
         "recipient": receiver_email,
-        "host": os.getenv("SMTP_HOST", inferred.get("host", "")).strip(),
-        "port": int(os.getenv("SMTP_PORT", inferred.get("port", 587)) or 587),
-        "use_ssl": inferred.get("use_ssl", False),
-        "use_starttls": not inferred.get("use_ssl", False),
+        # Email upgrade: Gmail app-password delivery must use SMTP_SSL on port 465.
+        "host": "smtp.gmail.com",
+        "port": 465,
+        "use_ssl": True,
+        "use_starttls": False,
         "password": password,
         "password_source": password_source,
     }
@@ -514,12 +540,14 @@ def _open_smtp_client(email_settings):
 
 def send_processed_documents_email(documents, email_settings):
     """
-    Processed document payloads ko SMTP se mail karo.
+    Processed document payloads ko Gmail SMTP BCC se mail karo.
     """
     resolved_settings = _resolve_email_delivery_settings(email_settings or {})
-    recipient = resolved_settings["recipient"] or _resolve_document_recipient(documents)
-    resolved_settings["recipient"] = recipient
-    resolved_settings["receiver_email"] = recipient
+    # Email upgrade: clean and validate all user-entered receiver emails.
+    recipients, invalid_recipients = _parse_receiver_emails(resolved_settings["recipient"])
+    resolved_settings["recipients"] = recipients
+    resolved_settings["recipient"] = ", ".join(recipients)
+    resolved_settings["receiver_email"] = ", ".join(recipients)
     sender = resolved_settings["from_email"]
     mode = str(email_settings.get("mode") or "auto").strip().lower()
 
@@ -529,18 +557,25 @@ def send_processed_documents_email(documents, email_settings):
     missing_fields = []
     if not sender:
         missing_fields.append("sender email")
-    if not recipient:
-        missing_fields.append("receiver email or one extracted document email")
+    if not resolved_settings.get("password"):
+        missing_fields.append("Gmail app password")
+    if not recipients:
+        missing_fields.append("at least one valid receiver email")
 
     if missing_fields:
+        errors = [f"Missing automatic email settings: {', '.join(missing_fields)}."]
+        if invalid_recipients:
+            errors.append("Invalid receiver email(s): " + ", ".join(invalid_recipients))
         return {
             "success": False,
             "sent_count": 0,
             "document_count": len(documents or []),
             "mode": mode,
             "sender": sender,
-            "recipient": recipient,
-            "errors": [f"Missing automatic email settings: {', '.join(missing_fields)}."],
+            "recipient": resolved_settings["recipient"],
+            "recipients": recipients,
+            "receiver_count": 0,
+            "errors": errors,
         }
 
     if not documents:
@@ -550,7 +585,9 @@ def send_processed_documents_email(documents, email_settings):
             "document_count": 0,
             "mode": mode,
             "sender": sender,
-            "recipient": recipient,
+            "recipient": resolved_settings["recipient"],
+            "recipients": recipients,
+            "receiver_count": len(recipients),
             "errors": ["No documents available for email delivery."],
         }
 
@@ -559,11 +596,11 @@ def send_processed_documents_email(documents, email_settings):
 
     if mode == "per_document":
         messages = [
-            _build_single_document_email(document, recipient, sender)
+            _build_single_document_email(document, recipients, sender)
             for document in documents
         ]
     else:
-        messages = [_build_combined_document_email(documents, recipient, sender)]
+        messages = [_build_combined_document_email(documents, recipients, sender)]
 
     smtp_ready = bool(
         resolved_settings.get("host")
@@ -577,93 +614,57 @@ def send_processed_documents_email(documents, email_settings):
         try:
             with _open_smtp_client(resolved_settings) as client:
                 for message in messages:
-                    client.send_message(message)
+                    # Email upgrade: send the envelope to sender plus BCC receivers.
+                    client.send_message(message, from_addr=sender, to_addrs=[sender, *recipients])
                     sent_subjects.append(message["Subject"])
             return {
                 "success": True,
-                "sent_count": len(messages),
+                "sent_count": len(recipients),
                 "document_count": len(documents),
                 "mode": mode,
                 "sender": sender,
-                "recipient": recipient,
+                "recipient": resolved_settings["recipient"],
+                "recipients": recipients,
+                "receiver_count": len(recipients),
                 "password_source": resolved_settings.get("password_source", ""),
-                "delivery_method": "smtp",
+                "delivery_method": "gmail_smtp_ssl",
                 "subjects": sent_subjects,
-                "errors": [],
+                "errors": [
+                    "Invalid receiver email(s) ignored: " + ", ".join(invalid_recipients)
+                ] if invalid_recipients else [],
             }
         except Exception as exc:
             smtp_error = str(exc).strip()
             if sent_subjects:
                 return {
                     "success": False,
-                    "sent_count": len(sent_subjects),
+                    "sent_count": 0,
                     "document_count": len(documents),
                     "mode": mode,
                     "sender": sender,
-                    "recipient": recipient,
-                    "delivery_method": "smtp",
+                    "recipient": resolved_settings["recipient"],
+                    "recipients": recipients,
+                    "receiver_count": len(recipients),
+                    "delivery_method": "gmail_smtp_ssl",
                     "errors": [smtp_error],
                     "subjects": sent_subjects,
                 }
 
-    try:
-        sent_subjects = _send_messages_via_outlook(messages, sender, include_attachments=True)
-        return {
-            "success": True,
-            "sent_count": len(messages),
-            "document_count": len(documents),
-            "mode": mode,
-            "sender": sender,
-            "recipient": recipient,
-            "delivery_method": "outlook",
-            "subjects": sent_subjects,
-            "errors": [],
-        }
-    except Exception as exc:
-        attachment_related = any(_extract_email_attachments(message) for message in messages)
-        if attachment_related:
-            try:
-                sent_subjects = _send_messages_via_outlook(messages, sender, include_attachments=False)
-                return {
-                    "success": True,
-                    "sent_count": len(messages),
-                    "document_count": len(documents),
-                    "mode": mode,
-                    "sender": sender,
-                    "recipient": recipient,
-                    "delivery_method": "outlook_no_attachment",
-                    "subjects": sent_subjects,
-                    "errors": [
-                        "Email sent without attachment because Outlook could not attach the uploaded file automatically."
-                    ],
-                }
-            except Exception:
-                pass
+    # Email upgrade: keep failures readable and contained so the Streamlit app keeps running.
+    errors = [f"Gmail SMTP failed: {smtp_error or 'SMTP settings are incomplete.'}"]
+    if invalid_recipients:
+        errors.append("Invalid receiver email(s) ignored: " + ", ".join(invalid_recipients))
 
-        errors = []
-        if smtp_error:
-            errors.append(f"SMTP failed: {smtp_error}")
-        else:
-            env_hint = (
-                f"Set ADMS_EMAIL_PASSWORD__{_sender_env_key(sender)} or ADMS_EMAIL_PASSWORD, "
-                "or configure Microsoft Outlook desktop with this sender account."
-            )
-            errors.append(
-                "Automatic email delivery could not start because no background login was available. "
-                + env_hint
-            )
-        outlook_error = _normalize_outlook_error(exc)
-        if outlook_error:
-            errors.append(f"Outlook failed: {outlook_error}")
-
-        return {
-            "success": False,
-            "sent_count": 0,
-            "document_count": len(documents),
-            "mode": mode,
-            "sender": sender,
-            "recipient": recipient,
-            "delivery_method": "unavailable",
-            "errors": errors,
-            "subjects": [],
-        }
+    return {
+        "success": False,
+        "sent_count": 0,
+        "document_count": len(documents),
+        "mode": mode,
+        "sender": sender,
+        "recipient": resolved_settings["recipient"],
+        "recipients": recipients,
+        "receiver_count": len(recipients),
+        "delivery_method": "gmail_smtp_ssl",
+        "errors": errors,
+        "subjects": [],
+    }

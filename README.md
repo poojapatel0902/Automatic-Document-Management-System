@@ -171,5 +171,5 @@ output/
 Built with ❤️ by Pooja Patel | Pavitrasoft Technologies
 =======
 # Automatic-Document-Management-System
-The Automatic Document Management System is an AI-powered platform that lets users upload documents and automatically extracts key details like name, date, and document type. It also creates a short summary and can automatically send the file to the required person through email or WhatsApp, saving time and reducing manual work.
+The Automatic Document Management System is an AI-powered platform that lets users upload documents and automatically extracts key details like name, date, and document type. It also creates a short summary and can automatically send the file to the required person through email, saving time and reducing manual work.
 >>>>>>> dac9de21e462293e3e9f4dc72a5f9b1ede15925f
